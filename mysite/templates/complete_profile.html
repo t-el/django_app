@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% block body %}
+    <div style="margin:auto;" >
+          <div class="d-flex">
+
+            <div style="width:50%;padding:50px;">
+             <h1 style="font-family:fantasy;">Welcome {{request.user.username}}.</h1>
+             <h1 style="font-family:fantasy;">Complete your Profile  .</h1>
+
+            </div>
+              <form style="margin:20px;width:50%;border-left:1px solid whitesmoke;padding:10px;" method="post">
+                  {% csrf_token %}
+                      <span class="h6">fullname : </span><br>
+                      <input class="in" name="fullname"  type="text"><br><br>
+                      <span class="h6">image : </span><br>
+                      <input  name="img" type="file"><br><br>
+                      <span class="h6">about : </span><br>
+                      <input class="in" name="about" type="text">
+                      <br><br>
+                      <button  style="border-radius:0;outline:none;" class="btn btn-sm btn-block btn-primary">Next -></button>
+
+               </form>
+
+
+        </div>
+      </div>
+
+{% endblock %}

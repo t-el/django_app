@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block body %}
+
+<div class="container">
+    <form class="form-group" typeof="post" enctype="multipart/form-data">
+        {% csrf_token %}
+          {{formset}}
+    </form>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

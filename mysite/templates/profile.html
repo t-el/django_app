@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+{% block body %}
+<div class="container">
+         <div class="m-4 d-flex">
+             <div class="d-flex flex-column col-md-4 ">
+                 {% if profile.img %}
+                      <img style="border-radius:50%;border:2px solid green;" width="200" height="200" src="/media/{{profile.img}}">
+                 {% else %}
+                 <div class="card bg-light shadow shadow-sm" style="position:relative;width:200px;height:200px;text-align:center;border-radius:50%;">
+                     <h1 class="m-3" style="font-size:150px;color:green;">{{profile.user.username | first}}</h1>
+
+                 </div>
+                 {% endif %}
+                 <div class="mt-3">
+
+                     <h2>{{profile.fullname}}</h2>
+                      <div class="d-flex">
+                         <p style="font-weight:bold;">@{{profile.user.username}}</p>
+                          {% ifequal user profile.user%}
+                          {% else %}
+                          &ensp;.&ensp;
+                          <form id="frm" method="post" action="/relation">
+                              {% csrf_token %}
+                              <input hidden name="to_user" value="{{profile.user}}">
+                                  <input hidden name="st" value="{{st}}">
+                              <b><input style="border:none;background:none;outline:none;color:#3399ff;font-weight:bold;" id="btn" type="submit" value="{{st}}"></b>
+
+
+                          </form>
+                             {%endifequal%}
+                      </div>
+                        <div class="d-flex">
+                            <kbd style="color:black;" class="bg-light shadow-sm"><b>following</b> : {{me | length}}</kbd>&ensp;.&ensp;
+                            <kbd style="color:black;" class="bg-light shadow-sm"><b>followers</b> : {{them | length}}</kbd>
+                             {% ifequal user profile.user%}
+                            .
+                             &ensp;<b><a href="/relation">More</a></b>
+                            {%endifequal%}
+                        </div>
+                     <div class="mt-1">
+                         <div class="d-flex">
+                             <span  style="font-size:medium;" class="material-icons m-1">
+                            info
+                            </span>
+                            <p class="m-1">{{profile.about}}</p>
+                         </div>
+
+                      <div class="d-flex">
+                             <span  style="font-size:medium;" class="material-icons m-1">
+                            place
+                            </span>
+                            <p class="m-1">{{profile.location}}</p>
+                         </div>
+
+                      <div class="d-flex">
+                             <span  style="font-size:medium;" class="material-icons m-1">
+                            business
+                            </span>
+                            <p class="m-1">{{profile.company}}</p>
+                         </div>
+                     </div>
+                     {% ifequal user profile.user%}
+                     <button  class="m-2" onclick="$('#modal').fadeIn()">Edit Profile</button>
+                              <form style="display:none;" id="modal"  method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                  <input id="img" type="file" accept="image/*" name="img" hidden>
+                                  iamge : <button onclick="$('#img').click();return false;"  style="border-radius:3rem;" class="btn-small">Edit image </button><br>
+                                  <span class="p">Fullname</span><br>
+                                  <input required class="in shadow shadow-sm form-control" value="{{profile.fullname}}" name="fullname"  type="text"><br>
+                                  <span class="p">Email (verification required here ) </span><br>
+                                  <input required class="in shadow shadow-sm form-control" name="email" value="{{user.email}}" type="email"><br>
+                                  <span class="p">About</span><br>
+                                  <textarea class="in shadow shadow-sm form-control p-2" style="height:80px;max-height:400px;min-height:80px;" maxlength="200" required aria-label="Tell us About you "  name = "about">{{profile.about}}</textarea>
+                                  <br>
+                                  <span class="p">Location</span><br>
+                                  <input required class="in shadow shadow-sm form-control" name="location" value="{{profile.location}}" type="text"><br>
+                                  <span class="p">Company</span><br>
+                                  <input required class="in shadow shadow-sm form-control" name="company" value="{{profile.company}}" type="text">
+                                  <div class="d-flex">
+                                     <input value="Submit" type="submit"  style="outline:none;color:white;" class="btn-small bg-success ">
+                                     <button onclick="$('#modal').fadeOut();return false;" style="outline:none;" class="btn btn-sm btn-block btn-outline-dark"> Cancel</button>
+                                 </div>
+
+                              </form>
+                      {% endifequal %}
+                  </div>
+             </div>
+
+             <div >
+                 <div class="d-flex">
+                     <button>Posts</button>  <button>Articles</button> <button>Questions</button> <button>Answers</button>
+                 </div>
+             </div>
+
+         </div>
+</div>
+{% endblock %}
+
+    {% block script %}
+
+       <script>
+       $('#frm').submit(ev =>{
+        headers = {
+           'X-CSRFToken':$('input[name="csrfmiddlewaretoken"]').val()
+           }
+           $.post('/relation',$('#frm').serialize() ,headers ).done(data =>{
+               location.reload();
+
+           });
+           return false;
+       });
+
+      /* $('#form_img').submit(ev =>{
+        headers = {
+           'X-CSRFToken':$('input[name="csrfmiddlewaretoken"]').val()
+           }
+           $.post('/upload_files',$('#form_img').serialize() ,headers ).done(data =>{
+            console.log(data)
+
+           });
+           return false;
+       });*/
+
+
+       </script>
+
+    {% endblock %}

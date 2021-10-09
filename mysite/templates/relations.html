@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Relations</h1><br>
+    <select id="select" class="card btn m-1">
+        <option value="F1" class="btn btn-sm" >Followers</option>
+        <option value="F2" class="btn btn-sm">Following</option>
+    </select>
+  <div class="d-flex flex-column card">
+
+      {% for f in following %}
+      <div id="followers" class="d-flex flex-column">
+          <div style="position:relative;" class="d-flex ">
+              {% if f.profile.img %}
+           <img class="m-3" style="border-radius:50%;border:2px solid green;" width="50" height="50" src="/media/{{f.profile.img}}">
+             {% else %}
+              <div class="card bg-light shadow shadow-sm m-3" style="position:relative;width:50px;height:50px;text-align:center;border-radius:50%;">
+                     <h1 class="m-3" style="font-size:15px;color:green;">{{f.to_user.username | first}}</h1>
+                 </div>
+              {% endif %}
+              <div class="d-flex flex-column">
+                  &ensp;&ensp;<b><a style="color:grey;" href="/profile/{{f.to_user}}">{{f.to_user}}</a></b>
+                  <b>@{{f.to_user}}</b>
+              </div>
+              <button class="m-2  btn-small" style="position:absolute;right:10px;">Unfolwow</button>
+
+          </div>
+ <hr>
+          {%endfor%}
+      </div>
+      
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+
+</script>
+{% endblock %}
